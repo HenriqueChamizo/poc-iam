@@ -12,13 +12,45 @@ Esta prova de conceito (POC) demonstra como realizar autenticação B2C em aplic
 
 ## 📦 Tecnologias utilizadas
 
-| Tecnologia        | Descrição                            |
-|-------------------|----------------------------------------|
-| .NET 9            | Aplicação cliente                     |
-| Red Hat SSO       | Identity Provider (baseado no Keycloak) |
-| OpenLDAP          | Backend LDAP com os usuários autenticáveis |
-| OpenID Connect    | Protocolo de autenticação             |
-| Docker Compose    | Orquestração local dos serviços       |
+| Tecnologia     | Descrição                                  |
+| -------------- | ------------------------------------------ |
+| .NET 9         | Aplicação cliente                          |
+| Red Hat SSO    | Identity Provider (baseado no Keycloak)    |
+| OpenLDAP       | Backend LDAP com os usuários autenticáveis |
+| OpenID Connect | Protocolo de autenticação                  |
+| Docker Compose | Orquestração local dos serviços            |
+
+---
+
+## 📚 Arquitetura
+
+```mermaid
+graph TD
+
+subgraph Usuário
+    browser[Cliente Web/App]
+end
+
+subgraph Aplicação
+    app["Aplicação .NET (OIDC Client)"]
+end
+
+subgraph IAM
+    keycloak["Red Hat SSO (Keycloak)"]
+    ldap["RHDS (simulado com OpenLDAP)"]
+end
+
+subgraph Core Bancário
+    idc["IDC (Cadastro Mestre de Clientes)"]
+end
+
+browser --> app
+app --> keycloak["Requisição de login (OIDC)"]
+keycloak --> ldap["Autenticação via LDAP"]
+keycloak --> idc["Consulta de dados (após login)"]
+keycloak --> app["Tokens OIDC (com dados do IDC)"]
+
+```
 
 ---
 
@@ -79,11 +111,12 @@ Acesse o painel admin:
 - **Connection URL**: `ldap://openldap:389`
 - **Bind DN**: `cn=admin,dc=empresa,dc=local`
 - **Bind Credential**: `admin`
-- **Users DN**: `ou=users,dc=empresa,dc=local` *(crie via .ldif)*
+- **Users DN**: `ou=users,dc=empresa,dc=local` _(crie via .ldif)_
 - **UUID LDAP attribute**: `uid` ou `entryUUID` ✅
 - **Edit mode**: `READ_ONLY` (ou `IMPORT`)
 
 > Após salvar, clique em:
+>
 > - ✅ **Test Connection**
 > - ✅ **Test Authentication**
 > - ✅ **Synchronize all users**
