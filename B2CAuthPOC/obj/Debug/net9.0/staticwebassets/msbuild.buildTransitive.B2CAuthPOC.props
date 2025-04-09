@@ -1,0 +1,3 @@
+﻿<Project>
+  <Import Project="../buildMultiTargeting/B2CAuthPOC.props" />
+</Project>

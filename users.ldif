@@ -1,0 +1,17 @@
+dn: ou=users,dc=empresa,dc=local
+objectClass: organizationalUnit
+ou: users
+
+dn: uid=joao,ou=users,dc=empresa,dc=local
+objectClass: inetOrgPerson
+cn: João Silva
+sn: Silva
+uid: joao
+userPassword: joao123
+
+dn: uid=maria,ou=users,dc=empresa,dc=local
+objectClass: inetOrgPerson
+cn: Maria Souza
+sn: Souza
+uid: maria
+userPassword: maria123
